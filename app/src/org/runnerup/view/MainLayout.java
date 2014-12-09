@@ -41,6 +41,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.TabHost;
 
@@ -130,6 +132,7 @@ public class MainLayout extends TabActivity {
         tabHost.setBackgroundColor(Color.BLACK);
         tabHost.getTabWidget().setBackgroundColor(Color.BLACK);
         tabHost.setCurrentTab(0);
+        addLegacyOverflowButton(getWindow());
 
         if (upgradeState == UpgradeState.UPGRADE) {
             whatsNew();
@@ -137,6 +140,19 @@ public class MainLayout extends TabActivity {
 
         handleBundled(getApplicationContext().getAssets(), "bundled", getFilesDir().getPath()
                 + "/..");
+    }
+
+    public static void addLegacyOverflowButton(Window window) {
+        if (window.peekDecorView() == null) {
+            return;
+        }
+
+        try {
+            window.addFlags(WindowManager.LayoutParams.class.getField("FLAG_NEEDS_MENU_KEY").getInt(null));
+        } catch (NoSuchFieldException e) {
+            // Ignore since this field won't exist in most versions of Android
+        } catch (IllegalAccessException e) {
+        }
     }
 
     void handleBundled(AssetManager mgr, String src, String dst) {
