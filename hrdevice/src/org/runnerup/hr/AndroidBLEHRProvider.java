@@ -168,13 +168,11 @@ public class AndroidBLEHRProvider extends BtHRBase implements HRProvider {
                     return;
                 }
 
-                if (isHeartRateInUINT16(arg0.getValue()[0])) {
-                    hrValue = arg0.getIntValue(
-                            BluetoothGattCharacteristic.FORMAT_UINT16, 1);
-                } else {
-                    hrValue = arg0.getIntValue(
-                            BluetoothGattCharacteristic.FORMAT_UINT8, 1);
-                }
+                HRData hrData = new BLEMessageParser(arg0).toHRData();
+
+                // overflow is extremely unlikely
+                hrValue = (int)hrData.hrValue;
+                hrTimestamp = hrData.timestamp;
 
                 if (hrValue == 0) {
                     if (mIsConnecting) {
@@ -185,8 +183,6 @@ public class AndroidBLEHRProvider extends BtHRBase implements HRProvider {
                     reportDisconnected();
                     return;
                 }
-
-                hrTimestamp = System.currentTimeMillis();
 
                 if (mIsConnecting) {
                     reportConnected(true);
