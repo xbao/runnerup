@@ -80,6 +80,7 @@ public class SamsungBLEHRProvider extends BtHRBase implements HRProvider {
     private BluetoothDevice btDevice = null;
     private int hrValue = 0;
     private long hrTimestamp = 0;
+    private HRData hrData = null;
     private boolean hasBattery = false;
     private int batteryLevel = -1;
 
@@ -216,7 +217,7 @@ public class SamsungBLEHRProvider extends BtHRBase implements HRProvider {
                 return;
             }
 
-            HRData hrData = new BLEMessageParser(arg0).toHRData();
+            hrData = new BLEMessageParser(arg0).toHRData();
 
             // overflow is extremely unlikely
             hrValue = (int)hrData.hrValue;
@@ -674,9 +675,7 @@ public class SamsungBLEHRProvider extends BtHRBase implements HRProvider {
 
     @Override
     public HRData getHRData() {
-        if(hrValue <= 0) return null;
-
-        return new HRData().setHeartRate(hrValue).setTimestampEstimate(hrTimestamp);
+        return hrData;
     }
 
     @Override
