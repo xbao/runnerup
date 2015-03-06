@@ -31,6 +31,14 @@ public class BLEMessageParser {
 
     }
 
+    public HRData toHRData(){
+        return toHRData(System.currentTimeMillis());
+    }
+
+    public HRData toHRData(long timestamp){
+        return new HRData().setHeartRate(heartRate).setTimestampEstimate(timestamp);
+    }
+
     private BLEMessageParser(Characteristic message) {
         this.message = message;
         if(message.getValue() != null) {
