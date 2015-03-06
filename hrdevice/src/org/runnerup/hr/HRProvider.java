@@ -146,17 +146,24 @@ public interface HRProvider {
     /**
      * @return the most recent heart rate value supplied by the connected device.
      *          0 indicates that no device has been connected (or the user is in a very bad way)
+     *
+     * @deprecated use {@link #getHRData()}
      */
+    @Deprecated
     public abstract int getHRValue();
 
     /**
      * @return the unix time of the last received heart rate value
+     *
+     * @deprecated use {@link #getHRData()}
      */
+    @Deprecated
     public abstract long getHRValueTimestamp();
 
     /**
      * @return the most recent heart rate data supplied by the device. If no device has
      *          been connected, this will be null
+     *
      */
     public abstract HRData getHRData();
 
